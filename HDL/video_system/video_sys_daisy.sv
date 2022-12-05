@@ -163,7 +163,7 @@ module video_sys_daisy
       .so_rgb(ghost_rgb3)
    );*/
    // instantiate osd 
-   /*chu_vga_osd_core#(.CD(CD), .KEY_COLOR(KEY_COLOR)) v2_osd_unit (
+   chu_vga_osd_core#(.CD(CD), .KEY_COLOR(KEY_COLOR)) v2_osd_unit (
       .clk(clk_sys),
       .reset(reset_sys),
       .x(x),
@@ -174,7 +174,7 @@ module video_sys_daisy
       .wr_data(slot_wr_data_array[`V2_OSD]),
       .si_rgb(ghost_rgb3),
       .so_rgb(osd_rgb2)
-   );*/
+   );
    // instantiate mouse sprite
    chu_vga_sprite_mouse_core 
       #(.CD(CD), .ADDR_WIDTH(10), .KEY_COLOR(KEY_COLOR)) 
