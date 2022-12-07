@@ -18,6 +18,7 @@
 #include "ps2_core.h"
 #include "ddfs_core.h"
 #include "adsr_core.h"
+#include "timer_core.h"
 
 void test_start(GpoCore *led_p) {
    int i;
@@ -128,72 +129,54 @@ void ghost_check(SpriteCore *ghost_p, Ps2Core *ps2_p) {
 
 	   }while (now_ms() - last < 5000);
 }
+/*if(time != 0)
+		     		{
+		     			frame_p -> clr_screen(0x000);
+		     			start = 0;
+		     		}*/
 
-/*	if(speed <= 299 && speed >= 200)
-   		{
-			if (ps2_p->get_kb_ch(&ch)) {
-              if(ch == 'l')
-              {
-              	  gx = gx + 2;
-              }
-              if(ch == 'j')
-              {
-            	  gx = gx - 2;
-              }
-              if(ch == 'i')
-              {
-              	  gy = gy - 2;
-              }
-              if(ch == 'k')
-              {
-              	  gy = gy + 2;
-              }
-            } // end get_kb_ch()
-         if(speed <= 399 && speed >= 300)
-         {
-         	 if (ps2_p->get_kb_ch(&ch)) {
-              if(ch == 'l')
-              {
-              	  gx = gx + 3;
-              }
-              if(ch == 'j')
-              {
-            	  gx = gx - 3;
-              }
-              if(ch == 'i')
-              {
-              	  gy = gy - 3;
-              }
-              if(ch == 'k')
-              {
-              	  gy = gy + 3;
-              }
-            } // end get_kb_ch()
-         }
+		     		/*if(time < 999999)
+		     		{
+		     			time = time + 1;
+		     			sleep_ms(100);
+		     		}
 
-         else
-         {
-
-         }
-   		}*/
+		     		if(time > 10 && time <19)
+		     		{
+		     			//  (50, 50)	(600, 50)
+		     			//	(50, 450)	(600, 450)
+		     			frame_p -> clr_screen(0xfff);
+		     			frame_p->plot_line(175, 100, 175, 400, 0x00f); //left side
+		     			frame_p->plot_line(175, 100, 475, 100, 0x0f);	//top side
+		     			frame_p->plot_line(175, 400, 475, 400, 0xf09);	//bottom side
+		     			frame_p->plot_line(475, 100, 475, 400, 0xff0); // right side
+		     		}
+		     		if(time > 20 && time < 29)
+		     		{
+		     			frame_p -> clr_screen(0xfff);
+		     			frame_p->plot_line(200, 125, 200, 375, 0x00f); //left side
+		     			frame_p->plot_line(200, 125, 450, 125, 0x0f);	//top side
+		     			frame_p->plot_line(200, 375, 450, 375, 0xf09);	//bottom side
+		     			frame_p->plot_line(450, 125, 450, 375, 0xff0); // right side
+		     		}*/
 
 /**
  * test ghost sprite
  * @param ghost_p pointer to mouse sprite instance
  */
-void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, FrameCore *frame_p, OsdCore *osd_p, uint32_t speed, int &time, int &start) {
+void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, FrameCore *frame_p, OsdCore *osd_p, uint32_t speed, TimerCore *time_p,int &start) {
    int mx, my , gx, gy;
    char ch;
    unsigned long last;
    int xdis, ydis;
-   int mxPrev, myPrev, gxPrev, gyPrev;
-   static int time_string [7] = {84, 73, 77, 69, 32, 61, 32};
-   static int mouse_string[9] = {77,79,85,83,69,76,79,83,69};
-   static int ghost_string[9] = {71,72,79,83,84,76,79,83,69};
-   static int win_string[3]={87,73,78};
+   int xHigh, xLow, yHigh, yLow;
+   int time_value = 0;
+   static int mouse_string[10] = {77,79,85,83,69,0,76,79,83,69};
+   static int ghost_string[10] = {71,72,79,83,84,0,76,79,83,69};
+   static int win_string[9]={71,72,79,83,84,0,87,73,78};
    mouse_p->bypass(0);
    ghost_p->bypass(0);
-   //frame_p->bypass(0);
+   frame_p->bypass(0);
    osd_p -> bypass(0);
 
     // dark gray/green
@@ -208,9 +191,8 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
      last = now_ms();
    mx = 400; gx = 300;
    my = 400; gy = 300;
-   mxPrev = mx; myPrev = my;
-   gxPrev = gx; gyPrev = gy;
-
+   xHigh = 600; xLow = 50;
+   yHigh = 450; yLow = 50;
    //ps2_p->get_kb_ch(&ch);
   /* if(ch == 'c')
    {
@@ -224,8 +206,18 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 
 		  // wasd for mouse movement
 		  // ijkl for ghost movement
+
+
    while(start == 1)
+	//while(time_value < 30)
    {
+	   /*time_p->clear();
+	   time_p->pause();
+	   time_value = time_p->read_time();
+	   time_p->go();
+	   time_p -> sleep(100000);*/
+
+	   	  // while(time_value < 30){
 
 		  if (ps2_p->get_kb_ch(&ch)) {
 		                if(ch == 'd')
@@ -286,44 +278,43 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 		     		{
 
 		     			frame_p->clr_screen(0xfff);
-		     			for (int i = 0; i < 3; i++)
+		     			for (int i = 0; i < 9; i++)
 		     				{
-		     					osd_p->wr_char(275+i, 0, win_string[i]);// display win
+		     					osd_p->wr_char(275+i, 0, win_string[i]);// display ghost win
+
 		     				}
 
 		     			start = 0;
 
 		     		}
 
-		     		if(mx >= 650 || mx <= 50 || my >= 450 || my <= 50) //mouse touches edges it loses
+		     		if(mx >= 600 || mx <= 50 || my >= 450 || my <= 50) //mouse touches edges it loses
 		     		{
 
 		     			frame_p->clr_screen(0xfff);
-		     			for (int i = 0; i < 9; i++)
+		     			for (int i = 0; i < 10; i++)
 		     				{
 		     					osd_p->wr_char(275+i, 0, mouse_string[i]);// display mouse lose
 		     				}
 
 		     			start = 0;
 		     		}
-		     		if(gx >= 650 || gx <= 50 || gy >= 450 || gy <= 50) // ghost touches edges it loses
+		     		if(gx >= 600 || gx <= 50 || gy >= 450 || gy <= 50) // ghost touches edges it loses
 		     		{
 
 		     			frame_p -> clr_screen(0xfff);
-		     			for (int i = 0; i < 9; i++)
+		     			for (int i = 0; i < 10; i++)
 		     			{
 		     				osd_p->wr_char(275+i, 0, ghost_string[i]);// display ghost lose
 		     			}
 
-		     			start = 0;
-		     		}
-		     		if(time == 60)
-		     		{
-		     			frame_p -> clr_screen(0x000);
-		     			start = 0;
+
 		     		}
 
-
+	   	   //}
+	   	   /*time_p -> clear();
+	   	   time_p -> pause();
+	   	   start = 0;*/
 
 	}
 
@@ -421,7 +412,7 @@ void startKey(Ps2Core *ps2_p, int &start, int &time, FrameCore *frame_p)
 	}
 	else
 	{
-		start =0;
+		start = 0;
 	}
 }
 
@@ -435,21 +426,46 @@ void display_speed(OsdCore *osd_p,int speed)
 	uint8_t speed3 = 51;
 	for (int i = 0; i < 5; i++)
 			{
-				osd_p->wr_char(300+i, y, speed_string[i]);
+				osd_p->wr_char(300+i, y, speed_string[i]); //display speed
 			}
 	if(speed == 2)
 	{
-		osd_p->wr_char(x, y, speed1);
+		osd_p->wr_char(x, y, speed1); //display 1
 	}
 	if(speed == 8)
 	{
-		osd_p->wr_char(x, y, speed2);
+		osd_p->wr_char(x, y, speed2); //display 2
 	}
 	if(speed == 12)
 	{
-		osd_p->wr_char(x, y, speed3);
+		osd_p->wr_char(x, y, speed3);// display 3
 	}
 }
+uint64_t getTime(TimerCore *time_p)
+{
+	uint64_t time_value;
+	time_value = time_p ->read_time();
+	return time_value;
+}
+
+void display_time_value(TimerCore *time_p)
+{
+	uint64_t time_value;
+	int startClk = 1;
+	if(startClk == 1)
+	{
+		time_p->clear();
+		time_p ->pause();
+		startClk = 0;
+		time_value = time_p ->read_time();
+	}
+	time_p -> go();
+	time_value = time_p ->read_time();
+
+	uart.disp("The time is: ");
+	uart.disp(time_value,10,3);
+	}
+//uint64_t read_time()
 // external core instantiation
 GpoCore led(get_slot_addr(BRIDGE_BASE, S2_LED));
 GpiCore sw(get_slot_addr(BRIDGE_BASE, S3_SW));
@@ -468,13 +484,15 @@ I2cCore adt7420(get_slot_addr(BRIDGE_BASE, S10_I2C));
 Ps2Core ps2(get_slot_addr(BRIDGE_BASE, S11_PS2));
 DdfsCore ddfs(get_slot_addr(BRIDGE_BASE, S12_DDFS));
 AdsrCore adsr(get_slot_addr(BRIDGE_BASE, S13_ADSR), &ddfs);
+TimerCore timer(get_slot_addr(BRIDGE_BASE, S0_SYS_TIMER));
 
 int main() {
 
 	int timer_value = 30;
 	double speed = 0;
 	int start = 0;
-	int time = 0;
+	int time = 500;
+	uint64_t showTime;
 	frame.clr_screen(0xfff);
 	draw_square(&frame);
    while (1) {
@@ -495,18 +513,21 @@ int main() {
      // gray_check(&gray);
       //ghost_check(&ghost,&ps2);
       //osd_check(&osd);
+	  // showTime = getTime(&timer);
+	   display_time_value(&timer);
 	   startKey(&ps2,start,time,&frame);
 	   speed = ghostSpeed(&adc);
 	   display_speed(&osd, speed);
       while(start == 1)
       {
+
     	  osd.clr_screen();
     	  display_time_const(&osd, &timer_value);
     	  display_speed(&osd, speed);
-    	  mouse_check(&mouse,&ps2,&ghost, &frame,&osd,speed,time,start);
-    	  timer_value = timer_value - 1;
+    	  mouse_check(&mouse,&ps2,&ghost, &frame,&osd,speed,&timer,start);
+
       }
-      timer_value = 30;
+      time = 500;
 
 
       while (sw.read(0)) {
