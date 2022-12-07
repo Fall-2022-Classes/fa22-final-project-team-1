@@ -1,1 +1,33 @@
+void display_time_const(OsdCore *osd_p, int *timer_value)
+{
+	static int time_string [7] = {84, 73, 77, 69, 32, 61, 32};
 
+	osd_p->set_color(0x001, 0x000);
+	for (int i = 0; i < 7; i++)
+	{
+		osd_p->wr_char(10+i, 0, time_string[i]);
+	}
+
+	if(*timer_value < 99999999999 && *timer_value >= 30)
+	{
+		osd_p->wr_char(18, 0, 43);
+		sleep_ms(500);
+		osd_p->wr_char(18, 0, 0);
+		sleep_ms(500);
+	}
+	else if (*timer_value < 30 && *timer_value >= 10)
+	{
+		osd_p->wr_char(18, 0, 45);
+		sleep_ms(500);
+		osd_p->wr_char(18, 0, 0);
+		sleep_ms(500);
+	}
+	else
+	{
+		osd_p->wr_char(18, 0, 33);
+		sleep_ms(500);
+		osd_p->wr_char(18, 0, 0);
+		sleep_ms(500);
+	}
+
+}
