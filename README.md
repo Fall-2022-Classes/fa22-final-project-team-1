@@ -6,3 +6,5 @@ before the time runs out. The goal for the runner is to evade the chaser until t
 it more challenging for the runner. Also, we are implement XADC to control the speed of the players. To control the players, we are using a keyboard (WASD and the 
 arrow keys). We will have two moving sprites for the characters, and we will have the score and time displayed on the VGA monitor. Therefore we are implementing XADC, 
 PS2 Keyboard, moving sprites, and on-screen display text. 
+
+https://youtu.be/Y9quKHrQLX0
