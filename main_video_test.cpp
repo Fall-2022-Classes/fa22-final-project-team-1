@@ -293,7 +293,7 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 		     				osd_p->wr_char(275+i, 0, ghost_string[i]);// display ghost lose
 		     			}
 
-
+					start = 0;
 		     		}
 	}
 
