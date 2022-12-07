@@ -1,1 +1,13 @@
+void draw_square(FrameCore *frame_p)
+{
+	//  (50, 50)	(600, 50)
+	//	(50, 450)	(600, 450)
 
+	int x, y, color;
+
+	//frame_p->clr_screen(0x000);  // dark green
+	frame_p->plot_line(50, 50, 50, 450, 0x000); //left side
+	frame_p->plot_line(50, 50, 600, 50, 0x000);	//top side
+	frame_p->plot_line(50, 450, 600, 450, 0x000);	//bottom side
+	frame_p->plot_line(600, 50, 600, 450, 0x000); // right side
+}
