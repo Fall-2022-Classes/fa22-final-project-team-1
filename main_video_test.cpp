@@ -174,6 +174,7 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
    static int mouse_string[10] = {77,79,85,83,69,0,76,79,83,69};
    static int ghost_string[10] = {71,72,79,83,84,0,76,79,83,69};
    static int win_string[9]={71,72,79,83,84,0,87,73,78};
+   static int pause_string[5] = {80,65,85,83,69};
    mouse_p->bypass(0);
    ghost_p->bypass(0);
    frame_p->bypass(0);
@@ -236,7 +237,10 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 		                if(ch == 'r')
 		                {
 		                	start = 0;
-
+		                	for(int z = 0;z <5;z++)
+		                	{
+		                		osd_p->wr_char(320+z, 0, pause_string[z]); // display pause onto screen
+		                	}
 		                }
 		                 //last = now_ms();
 		              } // end get_kb_ch()
@@ -250,7 +254,7 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 		     		{
 		     			xdis = xdis * -1;
 		     		}
-		     		if(ydis <0)
+		     		if(ydis <0) //absolute value
 		     		{
 		     			ydis = ydis * -1;
 		     		}
@@ -291,12 +295,6 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 
 
 		     		}
-
-	   	   //}
-	   	   /*time_p -> clear();
-	   	   time_p -> pause();
-	   	   start = 0;*/
-
 	}
 
 }
@@ -434,9 +432,10 @@ void display_time_value(TimerCore *time_p)
 	int startClk = 1;
 	if(startClk == 1)
 	{
+		startClk = 0;
 		time_p->clear();
 		time_p ->pause();
-		startClk = 0;
+
 		time_value = time_p ->read_time();
 	}
 	time_p -> go();
@@ -494,7 +493,7 @@ int main() {
       //ghost_check(&ghost,&ps2);
       //osd_check(&osd);
 	  // showTime = getTime(&timer);
-	  // display_time_value(&timer);
+	   display_time_value(&timer);
 	   startKey(&ps2,start,time,&frame); // press c to start game
 	   speed = ghostSpeed(&adc); // gets the speed of the ghost
 	   display_speed(&osd, speed); // display the ghost speed on the screen
