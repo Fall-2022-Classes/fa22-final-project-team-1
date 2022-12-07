@@ -1,1 +1,28 @@
-
+uint32_t ghostSpeed(XadcCore *adc_p)
+{
+	double reading;
+	int final;
+	uart.disp("analog channel/voltage: ");
+	uart.disp(0);
+	uart.disp(" / ");
+	reading = 1000*(adc_p->read_adc_in(0)); // 0 to 1 Volt
+	uart.disp(reading, 3);
+	uart.disp("\n\r");
+	
+	if (reading > 0 && reading < 333)
+	{
+		return final = 2;
+	}
+	if (reading >= 333 && reading < 666)
+		{
+		return final = 8;
+		}
+	if (reading >= 666 && reading <= 1000)
+	{
+		return final = 100;
+	}
+	//sleep_ms(500);
+	uart.disp("final reading: ");
+	uart.disp(final);
+	uart.disp("\n\r");
+}
