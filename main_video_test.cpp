@@ -193,32 +193,13 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
    my = 400; gy = 300;
    xHigh = 600; xLow = 50;
    yHigh = 450; yLow = 50;
-   //ps2_p->get_kb_ch(&ch);
-  /* if(ch == 'c')
-   {
-	   start = 1;
-   }
-   else
-   {
-	   start = 0;
-   }*/
-//	while(start == 1){
 
 		  // wasd for mouse movement
 		  // ijkl for ghost movement
-
-
+   	   	   //r for stopping
    while(start == 1)
-	//while(time_value < 30)
+
    {
-	   /*time_p->clear();
-	   time_p->pause();
-	   time_value = time_p->read_time();
-	   time_p->go();
-	   time_p -> sleep(100000);*/
-
-	   	  // while(time_value < 30){
-
 		  if (ps2_p->get_kb_ch(&ch)) {
 		                if(ch == 'd')
 		                {
@@ -259,8 +240,8 @@ void mouse_check(SpriteCore *mouse_p, Ps2Core *ps2_p, SpriteCore *ghost_p, Frame
 		                }
 		                 //last = now_ms();
 		              } // end get_kb_ch()
-		     		mouse_p->move_xy(mx,my);
-		     		ghost_p -> move_xy(gx,gy);
+		     		mouse_p->move_xy(mx,my); // move mouse
+		     		ghost_p -> move_xy(gx,gy); // move ghost
 
 		     		xdis = gx - mx;
 		     		ydis = gy - my;
@@ -343,7 +324,6 @@ uint32_t ghostSpeed(XadcCore *adc_p)
 		{
 			final = 12;
 		}
-		//sleep_ms(500);
 		uart.disp("final reading: ");
 		uart.disp(final);
 		uart.disp("\n\r"); //Return reading
@@ -514,10 +494,10 @@ int main() {
       //ghost_check(&ghost,&ps2);
       //osd_check(&osd);
 	  // showTime = getTime(&timer);
-	   display_time_value(&timer);
-	   startKey(&ps2,start,time,&frame);
-	   speed = ghostSpeed(&adc);
-	   display_speed(&osd, speed);
+	  // display_time_value(&timer);
+	   startKey(&ps2,start,time,&frame); // press c to start game
+	   speed = ghostSpeed(&adc); // gets the speed of the ghost
+	   display_speed(&osd, speed); // display the ghost speed on the screen
       while(start == 1)
       {
 
@@ -527,7 +507,7 @@ int main() {
     	  mouse_check(&mouse,&ps2,&ghost, &frame,&osd,speed,&timer,start);
 
       }
-      time = 500;
+
 
 
       while (sw.read(0)) {
